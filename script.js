@@ -36,6 +36,15 @@ function escapeHTML(value){
   const el=document.createElement("div");el.textContent=value;return el.innerHTML;
 }
 
+function shuffle(reviews){
+  const shuffled=[...reviews];
+  for(let i=shuffled.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
+  }
+  return shuffled;
+}
+
 function render(reviews){
   const grid=document.querySelector("#reviews");
   const average=reviews.reduce((sum,item)=>sum+item.rating,0)/reviews.length;
@@ -77,7 +86,7 @@ async function loadReviews(){
         photo:value(row,"photo")
       })).filter(item=>item.name&&item.review);
     if(!reviews.length)throw new Error("No approved reviews");
-    render(reviews);
+    render(shuffle(reviews));
   }catch(error){
     document.querySelector("#average").textContent="—";
     document.querySelector("#review-count").textContent="Reviews unavailable";
